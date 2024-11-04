@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="rating.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Rating Component</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: white;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border: 2px solid rgb(146, 145, 145);
+            width: 360px;
+            height: 300px;
+            padding: 30px;
+
+        }
+
+        .rating-header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 10px
+        }
+
+        .rating-header h4 {
+            font-weight: 700;
+            font-family: sans-serif;
+            font-size: 18px;
+        }
+
+        .rating-description {
+            font-size: 14px;
+            color: rgb(56, 54, 54);
+            font-weight: 400;
+        }
+
+        .rating-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .percentage-container {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .rating-type {
+            font-size: 14px;
+            color: rgb(3, 138, 136);
+            font-weight: 600;
+        }
+
+        .percentage-color {
+            flex: 1;
+            height: 20px;
+            border-radius: 5px;
+            border: 1px solid grey;
+
+        }
+
+        .percentage-value {
+            font-size: 14px;
+            color: rgb(3, 138, 136);
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <div class="rating-header">
+            <span class="star-container">
+                <!-- ⭐⭐⭐⭐⭐ -->
+
+            </span>
+            <!-- <h4>4.1 out of 5</h4> -->
+        </div>
+        <span class="rating-description">
+            9,758 global ratings
+        </span>
+        <div class="rating-container">
+
+        </div>
+    </main>
+    <script>
+        const ratings = [{ rating: 5, percentage: 57 }, { rating: 4, percentage: 22 }, { rating: 3, percentage: 6 }, { rating: 2, percentage: 3 }, { rating: 1, percentage: 12 }]
+
+        const ratingContainer = document.querySelector('.rating-container');
+        const starContainer = document.querySelector('.star-container');
+        const ratingHeader = document.querySelector(".rating-header")
+
+        function createAllRating() {
+            ratings.forEach((item) => {
+                ratingContainer.innerHTML += createRatingPerElement(item.rating, item.percentage)
+            })
+        }
+
+        function calculateAverageRating() {
+            const sum = ratings.reduce((acc, item) => acc + item.percentage * item.rating, 0);
+            return (sum / 100).toPrecision(2);
+        }
+        function createRatingStar() {
+            const average = parseInt(calculateAverageRating());
+            const arr = new Array(average).fill(0);
+            let ele = "";
+
+            arr.forEach((item) => {
+                ele += `<i class="fa-solid fa-star" style=" color: #ff6a00"></i>`;
+            })
+            new Array(5 - average).fill(0).forEach((item) => {
+                ele += `<i class="fa-regular fa-star" style=" color: #ff6a00"></i>`
+            })
+            console.log(ele)
+            starContainer.innerHTML += ele;
+        }
+        function createRatingHeader() {
+            const average = calculateAverageRating();
+            ratingHeader.innerHTML += `<h4>${average} out of 5</h4>`
+        }
+
+
+        function createRatingPerElement(rating, percentage) {
+            return `<div class="percentage-container">
+                <span class="rating-type">
+                    ${rating} star
+                </span>
+                <span class="percentage-color" style=" background: linear-gradient(to right, #ff6a00 ${percentage}%, white 0%);">
+                </span>
+                <span class="percentage-value">
+                ${percentage}%
+                </span>
+            </div>`
+        }
+        createRatingStar()
+        createRatingHeader()
+        createAllRating()
+    </script>
+</body>
+
+</html>
